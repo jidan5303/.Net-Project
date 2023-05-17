@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script>
+    var app = angular.module("app", []);
+    app.factory('interceptor', ['$q', '$window', function ($q, $window) {
+        var interceptor = {
+            request: function (config) {
+                config.headers.Authorization = localStorage.getItem("TokenKey");
+                return config;
+            },
+            response: function (response) {
+                return response;
+            },
+            responseError: function (rejection) {
+                if (rejection.status === 401) {
+                    $window.alert("Authorization denied");
+                    var loc = 'E:/Semester-10/.Net/Project/CareerPortal/Frontend/';
+                    window.location.href = loc + 'Login.html';
+                }
+                return $q.reject(rejection);
+            }
+        };
+        return interceptor;
+    }]);
+
+    app.config(['$httpProvider', function ($httpProvider) {
+        $httpProvider.interceptors.push('interceptor');
+    }]);
+
+    app.controller('ApplicantCtrl', function ($scope, $window, $http) {
+        $http({
+            method: 'GET',
+            url: "https://localhost:44354/api/ApplicantProfiles",
+            headers: {
+                'Authorization': localStorage.getItem("TokenKey")
+            }
+        }).then(function (resp) {
+            var allApplicant = resp.data;
+
+
+            var e = allApplicant.find(function (u) {
+                return u.User_Id == localStorage.getItem("UId");
+            });
+
+            if (e) {
+                $scope.currentApplicant = e;
+            }
+
+        }, function (err) {
+            $window.alert("Authorization denied");
+            var loc = 'E:/Semester-10/.Net/Project/CareerPortal/Frontend/';
+            window.location.href = loc + 'Login.html';
+        });
+    })
+		app.controller('CategoryCtrl', function ($scope, $http) {
+            $http.get("https://localhost:44354/api/ManageCategory").then(function (resp) {
+				$scope.categories = resp.data;
+			}, function (err) {
+				$scope.msg = "No data found";
+			});
+	})
+</script>
+
+<style>
+    span a:hover {
+        background: #464646;
+    }
+
+    nav a:hover {
+        background: #6a6a6a;
+        color: white;
+    }
+
+    .dashboard {
+        background: #232323;
+        margin-top: 0px;
+        width: 300px;
+        height: 95%;
+        position: fixed;
+    }
+
+    .account {
+        color: white;
+        display: flex;
+        justify-content: center;
+        padding-top: 40px;
+        padding-bottom: 40px;
+        border-bottom: 3px outset white;
+        margin-bottom: 0;
+    }
+
+    nav {
+        margin: 0;
+    }
+
+        nav a {
+            color: white;
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 30px;
+            padding-bottom: 30px;
+            margin: 0;
+        }
+</style>
+<body  ng-app="app">
+    <header>
+        <div class="bg-black p-3 d-flex justify-content-between align-items-center">
+            <a href="Index.html" class="h1 text-light text-decoration-none">Career<span class="text-secondary">Portal</span></a>
+            <div class="d-flex align-items-center" ng-controller="ApplicantCtrl">
+                <a href="ApplicantProfile.html" class="h3 text-light text-decoration-none m-3 p-2">{{currentApplicant.Name}}</a>
+                <a href="Login.html" class="h3 text-light text-decoration-none text-center m-3 p-2">Logout</a>
+            </div>
+        </div>
+    </header>
+    <div class="dashboard">
+        <h1 class="account">Applicant</h1>
+        <nav>
+            <a style="text-decoration: none;" href="ApplicantDashboard.html">Dashboard</a>
+            <a style="text-decoration: none;" href="ApplicantProfile.html">Profile</a>
+            <a style="text-decoration: none;" href="ApplicantEducation.html">Educational Qualification</a>
+            <a style="text-decoration: none;" href="AppliedJobs.html">Applied Jobs</a>
+            <a style="text-decoration: none;" href="ApplicantNotifications.html">Notification</a>
+            <a style="text-decoration: none;" href="Login.html">Logout</a>
+        </nav>
+    </div>
+    <div class="h1 container text-weight-bold text-center p-5" style="font-size: 5vw;">
+        <div><b>Find your dream job with</b></div>
+        <div><b>CareerPortal</b></div>
+    </div>
+    <br />
+    <br />
+    <div class="container">
+        <div class="h2"><b>Category</b></div>
+        <div class="card">
+                <div class="row p-3" ng-controller="CategoryCtrl">
+                    <div class="col-md-2 p-3 text-center" ng-repeat="c in categories">
+                        <a href="CategoryBasedJob.html?Category={{c.Name}}" class="btn btn-outline-dark btn-lg" style="width:9vw;">{{c.Name}}</a>
+                    </div>
+                </div>
+        </div>
+        <span>{{msg}}</span>
+    </div>
+    <footer class="bg-black text-center text-white fixed-bottom">
+        <div class="text-center p-1 d-flex justify-content-between align-items-center">
+            <span class="h5">� 2023 CareerPortal</span>
+            <div>
+                <a class="btn btn-outline-light btn-floating m-1" href="#!">
+                    <i class="bi bi-facebook"></i>
+                </a>
+                <a class="btn btn-outline-light btn-floating m-1" href="#!">
+                    <i class="bi bi-messenger"></i>
+                </a>
+                <a class="btn btn-outline-light btn-floating m-1" href="#!">
+                    <i class="bi bi-instagram"></i>
+                </a>
+                <a class="btn btn-outline-light btn-floating m-1" href="#!">
+                    <i class="bi bi-twitter"></i>
+                </a>
+                <a class="btn btn-outline-light btn-floating m-1" href="#!">
+                    <i class="bi bi-youtube"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+</body>
+</html>

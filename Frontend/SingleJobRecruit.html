@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+	</head>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	<script>
+        var app = angular.module("app",[]);
+		app.controller('jobViewCtrl',function($scope,$http){
+			var urlParams = new URLSearchParams(window.location.search);
+			var id = urlParams.get('Id');
+
+			debugger;
+
+			$scope.l = { Id: id};
+			$http.get("https://localhost:44354/api/EmployerJobPosts/"+id).then(function(resp){
+				$scope.job = resp.data;
+                
+			},function(err){
+				alert("No data found");
+			});
+
+			$http.get("https://localhost:44354/api/applicantappliedjobs").then(function (resp) {
+				$scope.applicant = resp.data;
+                $http.get("https://localhost:44354/api/EmployerJobPosts/" + id).then(function (resp) {
+                    $scope.job = resp.data;
+
+                }, function (err) {
+                    alert("No data found");
+                });
+
+
+            }, function (err) {
+                alert("No data found");
+			});
+
+			$scope.shortlist = function (a_id) {
+                $scope.s = {};
+				$scope.s.Shortlist = true;
+				$scope.s.JobPost_Id = id;
+				$scope.s.Applicant_Id = a_id;
+				debugger;
+
+				$http({
+					method: 'GET',
+					url: "https://localhost:44354/api/EmployerProfiles",
+					headers: {
+						'Authorization': localStorage.getItem("TokenKey")
+					}
+				}).then(function (resp) {
+					var allEmployers = resp.data;
+
+
+					var e = allEmployers.find(function (u) {
+						return u.User_Id == localStorage.getItem("UserId");
+					});
+
+					$scope.s.Employer_Id = e.Id;
+
+					var send = $scope.s;
+					debugger;
+
+					$http.post("https://localhost:44354/api/EmployerRecruitments/Create", send).then(function (resp) {
+						$scope.applied = resp.data;
+
+					}, function (err) {
+						alert("No data found");
+					});
+
+				}, function (err) {
+					alert("No data found");
+				});
+			}
+		})	
+		
+	</script>
+	
+	<style>
+        span a:hover {
+            background: #464646;
+        }
+
+        nav a:hover {
+            background: #6a6a6a;
+            color: white;
+        }
+        .dashboard {
+            background: #232323;
+            margin-top: 0px;
+            width: 300px;
+            height: 95%;
+            position: fixed;
+        }
+
+		.account {
+			color: white;
+			display: flex;
+			justify-content: center;
+			padding-top: 40px;
+			padding-bottom: 40px;
+			border-bottom: 3px outset white;
+			margin-bottom: 0;
+		}
+        .job {
+            margin-top: 15px; 
+            padding-top: 15px;
+        }
+
+        nav {
+            margin: 0;
+        }
+
+        nav a {
+            color: white;
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 30px;
+            padding-bottom: 30px;
+            margin: 0;
+        }
+		table {
+        border-collapse: collapse;
+        width: 70%;
+		}
+
+		th, td {
+			border: 1px solid black;
+			padding: 8px;
+		}
+
+		th {
+			background-color: #f2f2f2;
+		}
+
+		tr:nth-child(odd) {
+			background-color: #dddddd;
+		}
+
+	</style>
+	
+	<body ng-app="app">
+		<div ng-controller="jobViewCtrl">
+			<header>
+				<div class="bg-black p-3 d-flex justify-content-between align-items-center">
+					<a href="Index.html" class="h1 text-light text-decoration-none">Career<span class="text-secondary">Portal</span></a>
+					<div>
+						<!-- <a href="ApplicantProfile.html" class="h3 text-light text-decoration-none m-3 p-2">{{currentApplicant.Name}}</a> -->
+						<a href="Login.html" class="h3 text-light text-decoration-none text-center m-3 p-2">Logout</a>
+					</div>
+				</div>
+			</header>
+
+			<div class="dashboard">
+				<h1 class="account">Employer</h1>
+				<nav>
+					<a style="text-decoration: none;" href="EmployerDashboard.html">Dashboard</a>
+					<a style="text-decoration: none;" href="EmployerProfile.html">Profile</a>
+					<a style="text-decoration: none;" href="EmployerJobPost.html">Job Post</a>
+					<a style="text-decoration: none;" href="EmployerRecruitment.html">Recruitment</a>
+					<a style="text-decoration: none;" href="Login.html">Logout</a>
+				</nav>
+			</div>
+
+			<div class="container py-5 h-100">
+				<div class="row justify-content-center align-items-center h-100">
+					<div class="col-12 col-lg-9 col-xl-7">
+						<div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+							<div class="card-body p-4 p-md-5">
+								<div class="row">
+									<h3 class="col-md-8 mb-4 pb-2 pb-md-0 mb-md-5">Job Detail</h3>
+								</div>
+								<div class="row">
+									<h5 class="col-md-6 mb-4">{{job.Title}}</h5>
+									<h6>{{job.CompanyName}}</h6>
+								</div>
+								<div class="row">
+									<div class="col-md-6 mb-4">
+										<h6 class="job">Job Description</h6>
+										<span>{{job.Description}}</span>
+										<h6 class="job">Educational Requirements</h6>
+										<span>{{job.EducationLevel}}</span>
+										<h6 class="job">Experience Requirements</h6>
+										<span>{{job.Experience}}</span>
+										<h6 class="job">Employment Status</h6>
+										<span>{{job.Type}}</span>
+										<h6 class="job">Salary</h6>
+										<span>{{job.Salary}}</span>
+									</div>
+									<div class="col-md-6 mb-4">
+										<h6 class="job">Required skills</h6>
+										<span>{{job.RequiredSkills}}</span>
+										<h6 class="job">Location</h6>
+										<span>{{job.Location}}</span>
+										<h6 class="job">Company Mail</h6>
+										<span>{{job.CompanyMail}}</span>
+										<h6 class="job">Application Deadline</h6>
+										<span>{{job.ApplicationDeadline}}</span>
+									</div>
+									<div class="row p-3">
+										<div class="col-md-4 p-3 text-center" ng-repeat="a in applicant">
+											<input type="checkbox" ng-model="a.selected" ng-click="shortlist(a.ApplicantId)"> {{a.Mail}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			
+
+			<footer class="bg-black text-center text-white fixed-bottom">
+				<div class="text-center p-1 d-flex justify-content-between align-items-center">
+					<span class="h5">© 2023 CareerPortal</span>
+					<div>
+						<a class="btn btn-outline-light btn-floating m-1" href="#!">
+							<i class="bi bi-facebook"></i>
+						</a>
+						<a class="btn btn-outline-light btn-floating m-1" href="#!">
+							<i class="bi bi-messenger"></i>
+						</a>
+						<a class="btn btn-outline-light btn-floating m-1" href="#!">
+							<i class="bi bi-instagram"></i>
+						</a>
+						<a class="btn btn-outline-light btn-floating m-1" href="#!">
+							<i class="bi bi-twitter"></i>
+						</a>
+						<a class="btn btn-outline-light btn-floating m-1" href="#!">
+							<i class="bi bi-youtube"></i>
+						</a>
+					</div>
+				</div>
+			</footer>
+			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+		</div>
+	</body>
+</html>

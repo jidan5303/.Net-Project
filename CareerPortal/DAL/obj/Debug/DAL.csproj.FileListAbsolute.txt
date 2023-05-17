@@ -1,0 +1,28 @@
+E:\AIUB\Semester-10\Dot net project\Main Project\CareerPortal\CareerPortal\DAL\bin\Debug\DAL.dll.config
+E:\AIUB\Semester-10\Dot net project\Main Project\CareerPortal\CareerPortal\DAL\bin\Debug\DAL.dll
+E:\AIUB\Semester-10\Dot net project\Main Project\CareerPortal\CareerPortal\DAL\bin\Debug\DAL.pdb
+E:\AIUB\Semester-10\Dot net project\Main Project\CareerPortal\CareerPortal\DAL\bin\Debug\EntityFramework.dll
+E:\AIUB\Semester-10\Dot net project\Main Project\CareerPortal\CareerPortal\DAL\bin\Debug\EntityFramework.SqlServer.dll
+E:\AIUB\Semester-10\Dot net project\Main Project\CareerPortal\CareerPortal\DAL\bin\Debug\EntityFramework.xml
+E:\AIUB\Semester-10\Dot net project\Main Project\CareerPortal\CareerPortal\DAL\bin\Debug\EntityFramework.SqlServer.xml
+E:\AIUB\Semester-10\Dot net project\Main Project\CareerPortal\CareerPortal\DAL\obj\Debug\DAL.csproj.AssemblyReference.cache
+E:\AIUB\Semester-10\Dot net project\Main Project\CareerPortal\CareerPortal\DAL\obj\Debug\DAL.csproj.CoreCompileInputs.cache
+E:\AIUB\Semester-10\Dot net project\Main Project\CareerPortal\CareerPortal\DAL\obj\Debug\DAL.csproj.CopyComplete
+E:\AIUB\Semester-10\Dot net project\Main Project\CareerPortal\CareerPortal\DAL\obj\Debug\DAL.dll
+E:\AIUB\Semester-10\Dot net project\Main Project\CareerPortal\CareerPortal\DAL\obj\Debug\DAL.pdb
+E:\AIUB\Semester-10\Dot net project\Main Project\CareerPortal\CareerPortal\DAL\obj\Debug\DAL.Migrations.DBInit.resources
+E:\AIUB\Semester-10\Dot net project\Main Project\CareerPortal\CareerPortal\DAL\obj\Debug\DAL.csproj.GenerateResource.cache
+E:\Semester-10\.Net\Project\CareerPortal\CareerPortal\DAL\bin\Debug\DAL.dll.config
+E:\Semester-10\.Net\Project\CareerPortal\CareerPortal\DAL\bin\Debug\DAL.dll
+E:\Semester-10\.Net\Project\CareerPortal\CareerPortal\DAL\bin\Debug\DAL.pdb
+E:\Semester-10\.Net\Project\CareerPortal\CareerPortal\DAL\bin\Debug\EntityFramework.dll
+E:\Semester-10\.Net\Project\CareerPortal\CareerPortal\DAL\bin\Debug\EntityFramework.SqlServer.dll
+E:\Semester-10\.Net\Project\CareerPortal\CareerPortal\DAL\bin\Debug\EntityFramework.xml
+E:\Semester-10\.Net\Project\CareerPortal\CareerPortal\DAL\bin\Debug\EntityFramework.SqlServer.xml
+E:\Semester-10\.Net\Project\CareerPortal\CareerPortal\DAL\obj\Debug\DAL.csproj.AssemblyReference.cache
+E:\Semester-10\.Net\Project\CareerPortal\CareerPortal\DAL\obj\Debug\DAL.csproj.CoreCompileInputs.cache
+E:\Semester-10\.Net\Project\CareerPortal\CareerPortal\DAL\obj\Debug\DAL.csproj.CopyComplete
+E:\Semester-10\.Net\Project\CareerPortal\CareerPortal\DAL\obj\Debug\DAL.dll
+E:\Semester-10\.Net\Project\CareerPortal\CareerPortal\DAL\obj\Debug\DAL.pdb
+E:\Semester-10\.Net\Project\CareerPortal\CareerPortal\DAL\obj\Debug\DAL.Migrations.DbInit.resources
+E:\Semester-10\.Net\Project\CareerPortal\CareerPortal\DAL\obj\Debug\DAL.csproj.GenerateResource.cache

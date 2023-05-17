@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+	</head>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	<script>
+        var app = angular.module("app", []);
+        app.controller('registerEmployerCtrl', function ($scope, $http) {
+			$scope.registerEmployer = function () {
+
+                $scope.u.Type = "Employer";
+				var user = $scope.u;
+
+				var allUsers;
+				var user_id;
+
+                $http.post("https://localhost:44354/api/Users/Create", user).then(function (resp) {
+					$scope.users = resp.data;
+
+                    $http.get("https://localhost:44354/api/Users").then(function (resp) {
+                        allUsers = resp.data;
+
+
+                        var currentUser = allUsers.find(function (u) {
+                            return u.Username === user.Username;
+                        });
+
+                        if (currentUser) {
+							user_id = currentUser.Id;
+
+                            $scope.e.User_Id = user_id;
+                            var employer = $scope.e;
+
+                            $http.post("https://localhost:44354/api/EmployerProfiles/Create", employer).then(function (resp) {
+								$scope.users = resp.data;
+								var loc = 'E:/Semester-10/.Net/Project/CareerPortal/Frontend/';
+                                window.location.href = loc + 'Login.html';
+                            }, function (err) {
+                                $scope.msg = "No data found";
+                            });
+						}
+                    }, function (err) {
+                        $scope.msg = "No data found";
+                    });
+                }, function (err) {
+                    $scope.msg = "No data found";
+				});
+            };
+		})
+
+        app.controller('registerApplicantCtrl', function ($scope, $http) {
+            $scope.registerApplicant = function () {
+
+                $scope.u.Type = "Applicant";
+                var user = $scope.u;
+
+                var allUsers;
+				var user_id;
+
+                $http.post("https://localhost:44354/api/Users/Create", user).then(function (resp) {
+					$scope.users = resp.data;
+
+                    $http.get("https://localhost:44354/api/Users").then(function (resp) {
+						allUsers = resp.data;
+
+						var currentUser = allUsers.find(function (u) {
+                            return u.Username === user.Username;
+                        });
+
+                        if (currentUser) {
+                            user_id = currentUser.Id;
+
+                            $scope.a.UID = user_id;
+							var applicant = $scope.a;
+
+                            $http.post("https://localhost:44354/api/applicantprofiles/create", applicant).then(function (resp) {
+                                $scope.users = resp.data;
+                                var loc = 'E:/Semester-10/.Net/Project/CareerPortal/Frontend/';
+                                window.location.href = loc + 'Login.html';
+                            }, function (err) {
+                                $scope.msg = "No data found";
+                            });
+                        }
+                    }, function (err) {
+                        $scope.msg = "No data found";
+                    });
+                }, function (err) {
+                    $scope.msg = "No data found";
+                });
+            };
+        })
+	</script>
+	<body ng-app="app">
+		<header>
+			<div class="bg-black p-3 d-flex justify-content-between align-items-center">
+				<a href="Index.html" class="h1 text-light text-decoration-none">Career<span class="text-secondary">Portal</span></a>
+				<div>
+					<a href="Index.html" class="h3 text-light text-decoration-none text-center m-3 p-2">Home</a>
+					<a href="#" class=" h3 text-light text-decoration-none m-3 p-2">About</a>
+					<a href="#" class="h3 text-light text-decoration-none text-center m-3 p-2">Contact</a>
+				</div>
+				<div>
+					<a href="Login.html" class="h3 text-light text-decoration-none text-center m-3 p-2">Login</a>
+					<a href="Register.html" class="border h3 text-light text-decoration-none text-center m-3 p-2">Register</a>
+				</div>
+			</div>
+		</header>
+
+		<div class="d-flex justify-content-center pt-3">
+			<select ng-model="selectedProfile" class="select form-control-lg">
+				<option value="" disabled selected>Choose Type</option>
+				<option value="Applicant">Applicant</option>
+				<option value="Employer">Employer</option>
+			</select>
+		</div>
+
+		<!--Employer-->
+		<div ng-if="selectedProfile === 'Employer'" class="container py-5 h-100">
+		<div class="row justify-content-center align-items-center h-100">
+			<div class="col-12 col-lg-9 col-xl-7">
+				<div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+					<div class="card-body p-4 p-md-5" ng-controller="registerEmployerCtrl">
+						<div class="row">
+							<h3 class="col-md-8 mb-4 pb-2 pb-md-0 mb-md-5">Employer Registration Form</h3>
+						</div>
+						<form>
+							<div class="row">
+								<div class="col-md-6 mb-4">
+									<div class="form-outline">
+										<label class="form-label" for="">First Name</label>
+										<input type="text" id="" ng-model="e.FirstName" class="form-control form-control-lg" />
+									</div>
+								</div>
+								<div class="col-md-6 mb-4">
+									<div class="form-outline">
+										<label class="form-label" for="">Last Name</label>
+										<input type="text" id="" ng-model="e.LastName" class="form-control form-control-lg" />
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6 mb-4 pb-2">
+
+									<div class="form-outline">
+										<label class="form-label" for="">Email</label>
+										<input type="email" id="" ng-model="e.Email" class="form-control form-control-lg" />
+									</div>
+
+								</div>
+								<div class="col-md-6 mb-4 pb-2">
+
+									<div class="form-outline">
+										<label class="form-label" for="">Phone Number</label>
+										<input type="tel" id="" ng-model="e.PhoneNumber" class="form-control form-control-lg" />
+									</div>
+
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6 mb-4 pb-2">
+
+									<div class="form-outline">
+										<label class="form-label" for="">Username</label>
+										<input type="text" ng-model="u.Username" id="" class="form-control form-control-lg" />
+									</div>
+
+								</div>
+								<div class="col-md-6 mb-4 pb-2">
+
+									<div class="form-outline">
+										<label class="form-label" for="">Password</label>
+										<input type="text" ng-model="u.Password" id="" class="form-control form-control-lg" />
+									</div>
+
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6 mb-4 pb-2">
+
+									<div class="form-outline">
+										<label class="form-label" for="">Nationality</label>
+										<input type="text" id="" ng-model="e.Nationality" class="form-control form-control-lg" />
+									</div>
+
+								</div>
+								<div class="col-md-6 mb-4">
+									<h6 class="mt-3 pb-1">Gender: </h6>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" ng-model="e.Gender" ng-value="'Male'" name="gender" value="" />
+										<label class="form-check-label" >Male</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" ng-model="e.Gender" ng-value="'Female'" name="gender" value="" />
+										<label class="form-check-label" >Female</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" ng-model="e.Gender" ng-value="'Other'" name="gender" value="" />
+										<label class="form-check-label" >Other</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6 mb-4 pb-2">
+
+									<div class="form-outline">
+										<label class="form-label" for="">Date of Birth</label>
+										<input type="text" id="" class="form-control form-control-lg" ng-model="e.DateOfBirth">
+									</div>
+								</div>
+							</div>
+
+
+							<div class="mt-4 pt-2">
+								<input class="btn btn-primary btn-lg" ng-click="registerEmployer()" type="submit" value="Submit" />
+							</div>
+
+						</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+		<!--Applicant-->
+		<div ng-if="selectedProfile === 'Applicant'" class="container py-5 h-100">
+			<div class="row justify-content-center align-items-center h-100">
+				<div class="col-12 col-lg-9 col-xl-7">
+					<div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+						<div class="card-body p-4 p-md-5" ng-controller="registerApplicantCtrl">
+							<div class="row">
+								<h3 class="col-md-8 mb-4 pb-2 pb-md-0 mb-md-5">Applicant Registration Form</h3>
+							</div>
+							<form>
+								<div class="row">
+									<div class="col-md-6 mb-4">
+										<div class="form-outline">
+											<label class="form-label" for="">Name</label>
+											<input type="text" ng-model="a.Name" id="" class="form-control form-control-lg" />
+										</div>
+									</div>
+									<div class="col-md-6 mb-4">
+										<div class="form-outline">
+											<label class="form-label" for="">Address</label>
+											<input type="text" ng-model="a.Address" id="" class="form-control form-control-lg" />
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6 mb-4 pb-2">
+										<div class="form-outline">
+											<label class="form-label" for="">Email</label>
+											<input type="email" ng-model="a.Mail" id="" class="form-control form-control-lg" />
+										</div>
+									</div>
+									<div class="col-md-6 mb-4 pb-2">
+										<div class="form-outline">
+											<label class="form-label" for="">Phone Number</label>
+											<input type="tel" ng-model="a.Phone" id="" class="form-control form-control-lg" />
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6 mb-4 pb-2">
+										<div class="form-outline">
+											<label class="form-label" for="">Username</label>
+											<input type="text" ng-model="u.Username" id="" class="form-control form-control-lg" />
+										</div>
+									</div>
+									<div class="col-md-6 mb-4">
+										<div class="form-outline">
+											<label class="form-label" for="">Password</label>
+											<input type="text" ng-model="u.Password" id="" class="form-control form-control-lg" />
+										</div>
+									</div>
+								</div>
+								<div class="row">
+								<div class="col-md-6 mb-4 pb-2">
+									<div class="form-outline">
+										<label class="form-label" for="">Nationality</label>
+										<input type="text" id="" ng-model="a.Nationality" class="form-control form-control-lg" />
+									</div>
+								</div>
+								<div class="col-md-6 mb-4">
+									<h6 class="mt-3 pb-1">Gender: </h6>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" ng-model="a.Gender" ng-value="'Male'" name="gender" value="" />
+										<label class="form-check-label">Male</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" ng-model="a.Gender" ng-value="'Female'" name="gender" value="" />
+										<label class="form-check-label">Female</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" ng-model="a.Gender" ng-value="'Other'" name="gender" value="" />
+										<label class="form-check-label">Other</label>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6 mb-4 pb-2">
+
+									<div class="form-outline">
+										<label class="form-label" for="">Date of Birth</label>
+										<input type="text" id="" class="form-control form-control-lg" ng-model="a.DOB">
+									</div>
+								</div>
+							</div>
+								<div class="mt-4 pt-2">
+									<input class="btn btn-primary btn-lg" ng-click="registerApplicant()" type="submit" value="Submit" />
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<footer class="bg-black text-center text-white fixed-bottom">
+			<div class="text-center p-1 d-flex justify-content-between align-items-center">
+				<span class="h5">� 2023 CareerPortal</span>
+				<div>
+					<a class="btn btn-outline-light btn-floating m-1" href="#!">
+						<i class="bi bi-facebook"></i>
+					</a>
+					<a class="btn btn-outline-light btn-floating m-1" href="#!">
+						<i class="bi bi-messenger"></i>
+					</a>
+					<a class="btn btn-outline-light btn-floating m-1" href="#!">
+						<i class="bi bi-instagram"></i>
+					</a>
+					<a class="btn btn-outline-light btn-floating m-1" href="#!">
+						<i class="bi bi-twitter"></i>
+					</a>
+					<a class="btn btn-outline-light btn-floating m-1" href="#!">
+						<i class="bi bi-youtube"></i>
+					</a>
+				</div>
+			</div>
+		</footer>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+	</body>
+</html>
